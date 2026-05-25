@@ -1,59 +1,41 @@
-# FfxivAuroraForecast
+# FFXIV Aurora Forecast
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.12.
+一個基於 Angular 的《最終幻想14》(FFXIV) 極光預測工具。專門用於預測庫爾扎斯西部高地與舊薩雷安的極光出現時間。
 
-## Development server
+## 功能
 
-To start a local development server, run:
+- 預測庫爾扎斯西部高地 (Coerthas Western Highlands) 的極光。
+- 預測舊薩雷安 (Old Sharlayan) 的極光。
+- 計算極光出現的艾歐澤亞時間 (ET) 與實際時間。
+
+## 開發
+
+此專案使用 [Angular CLI](https://github.com/angular/angular-cli) 版本 21.2.12。
+
+### 本地運行
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+啟動後請訪問 `http://localhost:4200/`。
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### 構建
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+編譯後的檔案將存放在 `dist/` 目錄中。
 
-## Running unit tests
+## 引用與致謝
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+本專案的部分核心邏輯（天氣預測算法）參考並移植自：
+- [Asvel/ffxiv-weather](https://github.com/Asvel/ffxiv-weather)
 
-```bash
-ng test
-```
+感謝 Asvel 提供優秀的天氣預測基礎庫。
 
-## Running end-to-end tests
+## 授權
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+本專案採用 [MIT License](LICENSE) 授權。
