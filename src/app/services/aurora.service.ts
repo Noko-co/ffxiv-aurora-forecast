@@ -29,26 +29,27 @@ export class AuroraService {
         endHour: 7
       });
 
-      const zoneWindows = matches.map((m: any) => {
-        const match = m(true);
-        const etBegin = Math.floor(match.begin.getTime() / 1000 / 175) % 24;
-        const etEnd = (etBegin + 8) % 24;
-
-        return {
-          zoneName: z,
-          zoneNameCn: this.zoneNames[z],
-          begin: match.begin,
-          end: match.end,
-          etBegin,
-          etEnd,
-          // Aurora is visible ET 00:00 ~ 04:00
-          visibilityEnd: new Date(match.begin.getTime() + 4 * 175 * 1000),
-        };
-      });
+      const zoneWindows = matches.map((m: any) => this.zoneFormat(z, m));
       results.push(...zoneWindows);
     }
 
     // Sort by real time
     return results.sort((a, b) => a.begin.getTime() - b.begin.getTime());
+  }
+
+  zoneFormat(z: Zone, m: any) {
+    const match = m(true);
+    const etBegin = Math.floor(match.begin.getTime() / 1000 / 175) % 24;
+    const etEnd = (etBegin + 8) % 24;
+    return {
+      zoneName: z,
+      zoneNameCn: this.zoneNames[z],
+      begin: match.begin,
+      end: match.end,
+      etBegin,
+      etEnd,
+      // Aurora is visible ET 00:00 ~ 04:00
+      visibilityEnd: new Date(match.begin.getTime() + 4 * 175 * 1000),
+    };
   }
 }
