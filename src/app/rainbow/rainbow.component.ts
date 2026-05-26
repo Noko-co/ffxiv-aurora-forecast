@@ -1,11 +1,11 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
-import { DecimalPipe, DatePipe, CommonModule } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { RainbowService } from '../services/rainbow.service';
 
 @Component({
   standalone: true,
   selector: 'app-rainbow',
-  imports: [CommonModule, DecimalPipe, DatePipe],
+  imports: [CommonModule, DatePipe],
   templateUrl: './rainbow.component.html',
   styleUrls: ['./rainbow.component.css'],
 })

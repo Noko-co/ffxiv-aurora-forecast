@@ -306,3 +306,24 @@ button:disabled {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+
+.floating-btn {
+  position: fixed;
+  bottom: 20px; /* 距離螢幕底部 20px */
+  right: 20px;  /* 距離螢幕右側 20px */
+  z-index: 9999; /* 確保浮在最上層 */
+  background-color: #0084ff; /* 按鈕背景色 */
+  color: #ffffff; /* 文字顏色 */
+  padding: 15px 20px;
+  border-radius: 50px; /* 膠囊圓角外觀 */
+  text-decoration: none;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 陰影效果 */
+  font-weight: bold;
+}
+
+/* 滑鼠懸停時的效果 */
+.floating-btn:hover {
+  background-color: #0066cc;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
