@@ -26,6 +26,9 @@ export class RainbowService {
         .map((weather, index) => desTargets.includes(String(weather)) ? index : -1)
         .filter(index => index !== -1);
 
+      if (preIndex.length == 0 || desIndex.length == 0)
+        continue;
+
       // ET 00:00 weather block is represented by beginHour: 0
       // FFXIV weather changes at 0, 8, 16.
       const matches = find({
