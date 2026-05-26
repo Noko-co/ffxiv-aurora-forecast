@@ -1,11 +1,12 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { DecimalPipe, DatePipe, CommonModule } from '@angular/common';
 import { AuroraService } from '../services/aurora.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   standalone: true,
   selector: 'app-aurora',
-  imports: [CommonModule, DecimalPipe, DatePipe],
+  imports: [CommonModule, DecimalPipe, DatePipe, RouterLink],
   templateUrl: './aurora.component.html',
   styleUrls: ['./aurora.component.css'],
 })
