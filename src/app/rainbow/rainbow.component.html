@@ -20,7 +20,7 @@
         <span class="tag-icon">👁️</span>
         <div class="tag-content">
           <span class="tag-label">觀測時段</span>
-          <span class="tag-value">06:00 - 18:00</span>
+          <span class="tag-value">08:00 - 08:30<br>16:00 - 16:30</span>
         </div>
       </div>
     </div>
@@ -65,15 +65,18 @@
               <span class="rt-label">現實開始時間</span>
               <span class="rt-value">{{ group.begin | date:'MM/dd HH:mm:ss' }}</span>
             </div>
-
             <div class="details-grid">
               <div class="detail-item">
                 <span class="label">艾奧傑亞時段</span>
-                <span class="value">ET {{ group.etBegin }}</span>
+                <span class="value">{{ group.etBegin }}</span>
               </div>
               <div class="detail-item">
                 <span class="label">能見度</span>
                 <span class="value"><span [className]="'light '+group.light"></span></span>
+              </div>
+              <div class="detail-item">
+                <span class="label">現實結束時間</span>
+                <span class="value">{{ group.visibilityEnd | date:'HH:mm:ss' }}</span>
               </div>
             </div>
           </div>

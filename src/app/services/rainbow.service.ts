@@ -16,7 +16,7 @@ export class RainbowService {
 
     for (const z of zonesToCheck) {
       const preTargets = ['Rain', 'Showers', 'Thunderstorms'];
-      const desTargets = ['Clear Skies', 'Fair Skies', 'Clouds', 'Wind'];
+      const desTargets = ['Clear Skies', 'Fair Skies', 'Clouds', 'Wind', 'Dust Storms'];
 
       const preIndex = zoneWeathers[z]
         .map((weather, index) => preTargets.includes(String(weather)) ? index : -1)
@@ -32,8 +32,8 @@ export class RainbowService {
         zone: z,
         previousWeathers: new Set(preIndex),
         desiredWeathers: new Set(desIndex),
-        beginHour: 6,
-        endHour: 18
+        beginHour: 8,
+        endHour: 16
       });
 
       const zoneWindows
@@ -53,12 +53,21 @@ export class RainbowService {
     const match = m(true);
     const etBegin = formatEorzeaDate(match.begin) + " " + formatEorzeaTime(match.begin);
     const etEnd = formatEorzeaDate(match.end) + " " + formatEorzeaTime(match.end);
-    const days = Number(formatEorzeaDate(match.begin).substring(3));
+    var dt = Number(formatEorzeaDate(match.begin).substring(3) + formatEorzeaTime(match.begin).substring(0, 2));
     let level = 0;
-    if (days >= 27)
-      level = days - 27;
-    else
-      6 - days;
+
+    if (dt >= 3212 || dt <= 112)
+      level = 6;
+    else if (dt >= 3112 || dt < 212)
+      level = 5;
+    else if (dt >= 3012 || dt <= 312)
+      level = 4;
+    else if (dt >= 2912 || dt <= 412)
+      level = 3;
+    else if (dt >= 2812 || dt <= 512)
+      level = 2;
+    else if (dt >= 2712 || dt <= 612)
+      level = 1;
 
     return {
       zoneName: z,
@@ -67,11 +76,11 @@ export class RainbowService {
       end: match.end,
       etBegin,
       etEnd,
-      visibilityEnd: new Date(match.begin.getTime() + 4 * 175 * 1000),
+      visibilityEnd: new Date(match.begin.getTime() + 0.5 * 175 * 1000),
       light:
-        (level == 5) ? 'green' :
-          (level >= 3) ? 'yellow' :
-            (level >= 1) ? 'orange' :
+        (level == 6) ? 'green' :
+          (level >= 4) ? 'yellow' :
+            (level >= 2) ? 'orange' :
               'red'
     };
   }

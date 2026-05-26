@@ -35,7 +35,7 @@ export class RainbowComponent implements OnInit, OnDestroy {
     });
 
 
-    return Object.entries(groups).slice(0, 15)
+    return Object.entries(groups).slice(0, 30)
       .map(([timestamp, val]) => ({
         timestamp: Number(timestamp),
         begin: val[0]?.begin,
