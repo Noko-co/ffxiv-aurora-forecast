@@ -34,7 +34,7 @@
     <div class="no-data">目前沒有即將出現的彩虹。</div>
     } @else {
     <div class="zone-grid">
-      @for (group of groupedWindows(); track group.begin) {
+      @for (group of groupedWindows(); track group.timestamp) {
       <div class="cards">
         <div class="card" [class.active]="isActive(group)">
           <div class="card-header">
@@ -45,12 +45,21 @@
             } @else if (isActive(group)) {
             <span class="status-pulse">LIVE 現在出現中</span>
             }
-            <span class="countdown">
+            <span class="countdown clickable" (click)="toggleExpand(group.timestamp)">
               <span class="timer-icon">📍</span> {{ group.zoneNameCn.length }} 個地點
+              <span class="expand-icon">{{ isExpanded(group.timestamp) ? '▲' : '▼' }}</span>
             </span>
           </div>
 
           <div class="card-body">
+            @if (isExpanded(group.timestamp)) {
+            <div class="expanded-zones">
+              @for (nameCn of group.zoneNameCn; track nameCn) {
+              <div class="zone-name">{{ nameCn }}</div>
+              }
+            </div>
+            }
+
             <div class="rt-start-block">
               <span class="rt-label">現實開始時間</span>
               <span class="rt-value">{{ group.begin | date:'MM/dd HH:mm:ss' }}</span>
@@ -59,11 +68,11 @@
             <div class="details-grid">
               <div class="detail-item">
                 <span class="label">艾奧傑亞時段</span>
-                <span class="value">ET {{ group.etBegin | number:'2.0' }}:00 - 08:00</span>
+                <span class="value">ET {{ group.etBegin }}</span>
               </div>
               <div class="detail-item">
-                <span class="label">觀測結束</span>
-                <span class="value">{{ group.visibilityEnd | date:'HH:mm:ss' }}</span>
+                <span class="label">能見度</span>
+                <span class="value"><span [className]="'light '+group.light"></span></span>
               </div>
             </div>
           </div>

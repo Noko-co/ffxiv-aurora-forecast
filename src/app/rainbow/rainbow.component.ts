@@ -10,12 +10,14 @@ import { RainbowService } from '../services/rainbow.service';
   styleUrls: ['./rainbow.component.css'],
 })
 export class RainbowComponent implements OnInit, OnDestroy {
+
   private readonly rainbowService = inject(RainbowService);
   
   // Signals for state management
   loading = signal(true);
   now = signal(new Date());
   allWindows = signal<any[]>([]);
+  expandedGroups = signal<Set<number>>(new Set());
   
   private timer: any;
 
@@ -24,15 +26,17 @@ export class RainbowComponent implements OnInit, OnDestroy {
     const currentTime = this.now().getTime();
     const activeWindows = this.allWindows().filter((w: any) => w.visibilityEnd.getTime() > currentTime);
     
-    const groups: Record<string, any[]> = {};
+    const groups: Record<number, any[]> = {};
     activeWindows.forEach((w: any) => {
-      if (!groups[w.begin]) groups[w.begin] = [];
-      groups[w.begin].push(w);
+      const timestamp = w.begin.getTime();
+      if (!groups[timestamp]) groups[timestamp] = [];
+      groups[timestamp].push(w);
     });
 
 
     return Object.entries(groups).slice(0, 15)
-      .map(([name, val]) => ({
+      .map(([timestamp, val]) => ({
+        timestamp: Number(timestamp),
         begin: val[0]?.begin,
         end: val[0]?.end,
         etBegin: val[0]?.etBegin,
@@ -40,6 +44,7 @@ export class RainbowComponent implements OnInit, OnDestroy {
         visibilityEnd: val[0]?.visibilityEnd,
         zoneName: val.map(z=>z.zoneName),
         zoneNameCn: val.map(z=>z.zoneNameCn),
+        light: val[0]?.light,
       }))
   });
 
@@ -52,6 +57,20 @@ export class RainbowComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.timer) clearInterval(this.timer);
+  }
+
+  toggleExpand(timestamp: number) {
+    const next = new Set(this.expandedGroups());
+    if (next.has(timestamp)) {
+      next.delete(timestamp);
+    } else {
+      next.add(timestamp);
+    }
+    this.expandedGroups.set(next);
+  }
+
+  isExpanded(timestamp: number): boolean {
+    return this.expandedGroups().has(timestamp);
   }
 
   async initialLoad() {

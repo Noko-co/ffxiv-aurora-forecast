@@ -51,8 +51,14 @@ export class RainbowService {
 
   zoneFormat(z: Zone, m: any) {
     const match = m(true);
-    const etBegin = Math.floor(match.begin.getTime() / 1000 / 175) % 24;
-    const etEnd = (etBegin + 8) % 24;
+    const etBegin = formatEorzeaDate(match.begin) + " " + formatEorzeaTime(match.begin);
+    const etEnd = formatEorzeaDate(match.end) + " " + formatEorzeaTime(match.end);
+    const days = Number(formatEorzeaDate(match.begin).substring(3));
+    let level = 0;
+    if (days >= 27)
+      level = days - 27;
+    else
+      6 - days;
 
     return {
       zoneName: z,
@@ -61,8 +67,12 @@ export class RainbowService {
       end: match.end,
       etBegin,
       etEnd,
-      // Rainbow is visible ET 00:00 ~ 04:00
       visibilityEnd: new Date(match.begin.getTime() + 4 * 175 * 1000),
+      light:
+        (level == 5) ? 'green' :
+          (level >= 3) ? 'yellow' :
+            (level >= 1) ? 'orange' :
+              'red'
     };
   }
 }

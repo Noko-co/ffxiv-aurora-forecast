@@ -7,10 +7,86 @@
   padding: 40px 20px;
 }
 
-
 .zone-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 30px;
   align-items: start;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.countdown.clickable {
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.countdown.clickable:hover {
+  background: rgba(255, 204, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.expand-icon {
+  font-size: 0.7em;
+  opacity: 0.7;
+}
+
+.expanded-zones {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideDown 0.3s ease-out;
+}
+
+.zone-name {
+  font-size: 0.8em;
+  color: #8da2b5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.light {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%; /* 變成正圓形 */
+  display: inline-block;
+  /* 增加內陰影(立體感)與外陰影(微光) */
+  box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3), 
+              0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 四種顏色的發光設定 */
+.red {
+  background-color: #ff4d4d;
+}
+
+.orange {
+  background-color: #ffa500;
+}
+
+.yellow {
+  background-color: #ffeb3b;
+}
+
+.green {
+  background-color: #4caf50;
 }
