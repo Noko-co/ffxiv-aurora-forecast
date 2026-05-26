@@ -1,6 +1,6 @@
 // AuroraService - ported logic from scripts/aurora.js to provide data to Angular UI
 import { Injectable } from '@angular/core';
-import { zoneWeathers, Zone, find } from './Weather'
+import { zoneWeathers, Zone, find } from './weather'
 
 @Injectable({ providedIn: 'root' })
 export class AuroraService {
