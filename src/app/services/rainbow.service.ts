@@ -1,7 +1,7 @@
 // RainbowService - ported logic from scripts/rainbow.js to provide data to Angular UI
 import { Injectable } from '@angular/core';
-import { zoneWeathers, Zone, find, groupedZones } from './weather'
-import { zoneNames } from './zone'
+import { zoneWeathers, Zone, find } from './weather'
+import { zoneNames, zoneGroup } from './zone'
 import { formatEorzeaDate, formatEorzeaTime } from './utils'
 
 @Injectable({ providedIn: 'root' })
@@ -17,19 +17,16 @@ export class RainbowService {
     const eligible = this.getEligibleZones();
     const eligibleNames = new Set(eligible.map(z => z.name));
 
-    return groupedZones
-      .map(group => {
-        const filteredZones = group
+    return Object.entries(zoneGroup)
+      .map(([groupName, groupZones]) => {
+        const filteredZones = (groupZones as Zone[])
           .filter(z => eligibleNames.has(z))
           .map(z => ({ name: z, nameCn: zoneNames[z] }));
         
         if (filteredZones.length === 0) return null;
 
-        // Use the first zone's name to identify the group or a generic label
-        // Since groupedZones doesn't have labels, we might want to infer them or just use "Group X"
-        // But the user said "參考 weather.ts 內的 groupedZones 分組", maybe just use a label derived from the first zone.
         return {
-          nameCn: filteredZones[0].nameCn + ' 等',
+          nameCn: groupName,
           zones: filteredZones
         };
       })

@@ -38,7 +38,8 @@
     <div class="filter-group-container">
       @for (group of groupedEligibleZones(); track group.nameCn) {
       <div class="filter-region">
-        <div class="region-static-header">
+        <div class="region-static-header" (click)="toggleGroup(group)">
+          <span class="group-toggle-icon">{{ isGroupSelected(group) ? '☑' : '☐' }}</span>
           <span class="region-title">{{ group.nameCn }}</span>
           <span class="region-count">({{ group.zones.length }})</span>
         </div>

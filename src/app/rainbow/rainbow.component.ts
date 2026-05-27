@@ -85,6 +85,22 @@ export class RainbowComponent implements OnInit, OnDestroy {
     return this.selectedZones().has(zoneName);
   }
 
+  toggleGroup(group: { nameCn: string, zones: { name: string, nameCn: string }[] }) {
+    const next = new Set(this.selectedZones());
+    const allSelected = group.zones.every(z => next.has(z.name));
+    
+    if (allSelected) {
+      group.zones.forEach(z => next.delete(z.name));
+    } else {
+      group.zones.forEach(z => next.add(z.name));
+    }
+    this.selectedZones.set(next);
+  }
+
+  isGroupSelected(group: { nameCn: string, zones: { name: string, nameCn: string }[] }): boolean {
+    return group.zones.every(z => this.selectedZones().has(z.name));
+  }
+
   ngOnDestroy() {
     if (this.timer) clearInterval(this.timer);
   }
