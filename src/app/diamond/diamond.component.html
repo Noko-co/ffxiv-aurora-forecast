@@ -1,0 +1,101 @@
+<div class="container">
+  <header>
+    <h1>FFXIV 鑽石星塵預報 <small>Diamond Forecast</small></h1>
+    <div class="conditions">
+      <div class="condition-tag">
+        <span class="tag-icon">🗺️</span>
+        <div class="tag-content">
+          <span class="tag-label">指定區域</span>
+          <span class="tag-value">庫爾扎斯西部高地</span>
+        </div>
+      </div>
+      <div class="condition-tag">
+        <span class="tag-icon">🌤️</span>
+        <div class="tag-content">
+          <span class="tag-label">氣象要求</span>
+          <span class="tag-value">ET 00:00/08:00 晴朗</span>
+        </div>
+      </div>
+      <div class="condition-tag">
+        <span class="tag-icon">👁️</span>
+        <div class="tag-content">
+          <span class="tag-label">觀測時段</span>
+          <span class="tag-value">06:00 - 08:00<br>08:00 - 10:00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="diamond-list">
+    @if (loading()) {
+    <div class="loading">正在計算未來的時間窗口...</div>
+    } @else {
+    @if (groupedWindows().length === 0) {
+    <div class="no-data">目前沒有即將出現的鑽石星塵的時間窗口。</div>
+    } @else {
+    <div class="zone-grid">
+      @for (group of groupedWindows(); track group.zoneNameCn) {
+      <div class="zone-column">
+        <h2 class="zone-title">
+          <span class="icon">📍</span> {{ group.zoneNameCn }}
+        </h2>
+        <div class="cards">
+          @for (w of group.windows; track w.begin.getTime()) {
+          <div class="card" [class.active]="isActive(w)">
+            <div class="card-header">
+              @if (isUpcoming(w)) {
+              <span class="countdown">
+                <span class="timer-icon">⏳</span> {{ getCountdown(w) }}
+              </span>
+              } @else if (isActive(w)) {
+              <span class="status-pulse">LIVE 現在出現中</span>
+              }
+            </div>
+
+            <div class="card-body">
+              <div class="rt-start-block">
+                <span class="rt-label">現實開始時間</span>
+                <span class="rt-value">{{ w.begin | date:'MM/dd HH:mm:ss' }}</span>
+              </div>
+
+              <div class="details-grid">
+                <div class="detail-item">
+                  <span class="label">艾奧傑亞時段</span>
+                  <span class="value">ET {{ w.etBegin | number:'2.0' }}:00 - {{ w.etBegin + 2 | number:'2.0'
+                    }}:00</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">觀測結束</span>
+                  <span class="value">{{ w.visibilityEnd | date:'HH:mm:ss' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              @if (isActive(w)) {
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress-glow" [style.width.%]="getProgressWidth(w)"></div>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    }
+    }
+  </section>
+
+  <footer>
+    <button (click)="refresh()" [disabled]="loading()">手動刷新</button>
+  </footer>
+</div>
+
+<div class="floating">
+  <a [routerLink]="['/aurora']" class="floating-btn" target="_self">極光預報</a>
+  <a [routerLink]="['/rainbow']" class="floating-btn" target="_self">彩虹預報</a>
+</div>

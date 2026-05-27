@@ -307,12 +307,14 @@ button:disabled {
   to { transform: translateY(0); opacity: 1; }
 }
 
+.floating{
+  position: fixed;
+  z-index: 9999; /* 確保浮在最上層 */
+  bottom: 30px; /* 距離螢幕底部 20px */
+  right: 30px;  /* 距離螢幕右側 20px */
+}
 
 .floating-btn {
-  position: fixed;
-  bottom: 20px; /* 距離螢幕底部 20px */
-  right: 20px;  /* 距離螢幕右側 20px */
-  z-index: 9999; /* 確保浮在最上層 */
   background-color: #0084ff; /* 按鈕背景色 */
   color: #ffffff; /* 文字顏色 */
   padding: 15px 20px;
@@ -320,6 +322,7 @@ button:disabled {
   text-decoration: none;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 陰影效果 */
   font-weight: bold;
+  margin-left: 5px;
 }
 
 /* 滑鼠懸停時的效果 */
