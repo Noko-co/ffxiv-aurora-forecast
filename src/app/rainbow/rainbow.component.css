@@ -154,6 +154,12 @@
   align-items: center;
   gap: 8px;
   padding-top: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.region-static-header:hover {
+  opacity: 0.8;
 }
 
 .region-title {
@@ -166,6 +172,12 @@
 .region-count {
   font-size: 0.75em;
   color: #718096;
+  flex-grow: 1;
+}
+
+.group-toggle-icon {
+  font-size: 1.1em;
+  color: #ffcc00;
 }
 
 .filter-options {
