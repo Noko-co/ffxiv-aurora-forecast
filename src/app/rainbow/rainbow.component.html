@@ -27,6 +27,34 @@
 
   </header>
 
+  <section class="filters">
+    <div class="filter-header" (click)="toggleFilter()">
+      <span class="filter-label">篩選地點</span>
+      <span class="filter-status">{{ selectedZones().size > 0 ? '已選擇 ' + selectedZones().size + ' 個地點' : '全部地點' }}</span>
+      <span class="filter-toggle">{{ isFilterExpanded() ? '▲' : '▼' }}</span>
+    </div>
+
+    @if (isFilterExpanded()) {
+    <div class="filter-group-container">
+      @for (group of groupedEligibleZones(); track group.nameCn) {
+      <div class="filter-region">
+        <div class="region-static-header">
+          <span class="region-title">{{ group.nameCn }}</span>
+          <span class="region-count">({{ group.zones.length }})</span>
+        </div>
+        <div class="filter-options">
+          @for (zone of group.zones; track zone.name) {
+          <button class="filter-chip" [class.selected]="isSelected(zone.name)" (click)="toggleZone(zone.name)">
+            {{ zone.nameCn }}
+          </button>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </section>
+
   <section class="rainbow-list">
     @if (loading()) {
     <div class="loading">正在計算未來視窗...</div>

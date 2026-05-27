@@ -20,13 +20,23 @@ export class RainbowComponent implements OnInit, OnDestroy {
   allWindows = signal<any[]>([]);
   expandedGroups = signal<Set<number>>(new Set());
   
+  groupedEligibleZones = signal<{nameCn: string, zones: {name: string, nameCn: string}[]}[]>([]);
+  isFilterExpanded = signal(false);
+  selectedZones = signal<Set<string>>(new Set());
+
   private timer: any;
 
   // Computed signal for grouped windows - reacts to both allWindows and now signals
   groupedWindows = computed(() => {
     const currentTime = this.now().getTime();
-    const activeWindows = this.allWindows().filter((w: any) => w.visibilityEnd.getTime() > currentTime);
+    const selected = this.selectedZones();
     
+    let activeWindows = this.allWindows().filter((w: any) => w.visibilityEnd.getTime() > currentTime);
+    
+    if (selected.size > 0) {
+      activeWindows = activeWindows.filter((w: any) => selected.has(w.zoneName));
+    }
+
     const groups: Record<number, any[]> = {};
     activeWindows.forEach((w: any) => {
       const timestamp = w.begin.getTime();
@@ -50,10 +60,29 @@ export class RainbowComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit() {
+    this.groupedEligibleZones.set(this.rainbowService.getGroupedEligibleZones());
     this.initialLoad();
     this.timer = setInterval(() => {
       this.now.set(new Date());
     }, 1000);
+  }
+
+  toggleFilter() {
+    this.isFilterExpanded.set(!this.isFilterExpanded());
+  }
+
+  toggleZone(zoneName: string) {
+    const next = new Set(this.selectedZones());
+    if (next.has(zoneName)) {
+      next.delete(zoneName);
+    } else {
+      next.add(zoneName);
+    }
+    this.selectedZones.set(next);
+  }
+
+  isSelected(zoneName: string): boolean {
+    return this.selectedZones().has(zoneName);
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 // RainbowService - ported logic from scripts/rainbow.js to provide data to Angular UI
 import { Injectable } from '@angular/core';
-import { zoneWeathers, Zone, find } from './weather'
+import { zoneWeathers, Zone, find, groupedZones } from './weather'
 import { zoneNames } from './zone'
 import { formatEorzeaDate, formatEorzeaTime } from './utils'
 
@@ -10,24 +10,60 @@ export class RainbowService {
   // Modern Angular style uses inject() but we have no deps here.
   // We'll just keep the class structure clean.
 
+  readonly preTargets = ['Rain', 'Showers', 'Thunderstorms'];
+  readonly desTargets = ['Clear Skies', 'Fair Skies', 'Clouds', 'Wind', 'Dust Storms'];
+
+  getGroupedEligibleZones(): { nameCn: string, zones: { name: Zone, nameCn: string }[] }[] {
+    const eligible = this.getEligibleZones();
+    const eligibleNames = new Set(eligible.map(z => z.name));
+
+    return groupedZones
+      .map(group => {
+        const filteredZones = group
+          .filter(z => eligibleNames.has(z))
+          .map(z => ({ name: z, nameCn: zoneNames[z] }));
+        
+        if (filteredZones.length === 0) return null;
+
+        // Use the first zone's name to identify the group or a generic label
+        // Since groupedZones doesn't have labels, we might want to infer them or just use "Group X"
+        // But the user said "參考 weather.ts 內的 groupedZones 分組", maybe just use a label derived from the first zone.
+        return {
+          nameCn: filteredZones[0].nameCn + ' 等',
+          zones: filteredZones
+        };
+      })
+      .filter((g): g is { nameCn: string, zones: { name: Zone, nameCn: string }[] } => g !== null);
+  }
+
+  getEligibleZones(): { name: Zone, nameCn: string }[] {
+    return ([...Object.keys(zoneNames)] as Zone[])
+      .filter(z => {
+        const preIndex = zoneWeathers[z]
+          .map((weather, index) => this.preTargets.includes(String(weather)) ? index : -1)
+          .filter(index => index !== -1);
+
+        const desIndex = zoneWeathers[z]
+          .map((weather, index) => this.desTargets.includes(String(weather)) ? index : -1)
+          .filter(index => index !== -1);
+
+        return preIndex.length > 0 && desIndex.length > 0;
+      })
+      .map(z => ({ name: z, nameCn: zoneNames[z] }));
+  }
+
   async getRainbowWindows(): Promise<any[]> {
-    const zonesToCheck = [...Object.keys(zoneNames)] as Zone[];
+    const zonesToCheck = this.getEligibleZones().map(z => z.name);
     const results: any[] = [];
 
     for (const z of zonesToCheck) {
-      const preTargets = ['Rain', 'Showers', 'Thunderstorms'];
-      const desTargets = ['Clear Skies', 'Fair Skies', 'Clouds', 'Wind', 'Dust Storms'];
-
       const preIndex = zoneWeathers[z]
-        .map((weather, index) => preTargets.includes(String(weather)) ? index : -1)
-        .filter(index => index !== -1); // 這裡要過濾的是 -1，保留 0 
-
-      const desIndex = zoneWeathers[z]
-        .map((weather, index) => desTargets.includes(String(weather)) ? index : -1)
+        .map((weather, index) => this.preTargets.includes(String(weather)) ? index : -1)
         .filter(index => index !== -1);
 
-      if (preIndex.length == 0 || desIndex.length == 0)
-        continue;
+      const desIndex = zoneWeathers[z]
+        .map((weather, index) => this.desTargets.includes(String(weather)) ? index : -1)
+        .filter(index => index !== -1);
 
       // ET 00:00 weather block is represented by beginHour: 0
       // FFXIV weather changes at 0, 8, 16.
