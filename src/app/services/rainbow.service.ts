@@ -22,7 +22,7 @@ export class RainbowService {
         const filteredZones = (groupZones as Zone[])
           .filter(z => eligibleNames.has(z))
           .map(z => ({ name: z, nameCn: zoneNames[z] }));
-        
+
         if (filteredZones.length === 0) return null;
 
         return {
@@ -86,8 +86,11 @@ export class RainbowService {
   }
 
   zoneFormat(z: Zone, m: any) {
-    const match = m(true);
-    const etBegin = formatEorzeaDate(match.begin) + " " + formatEorzeaTime(match.begin);
+    const ffm = ((175 * 1000) / 60)+1
+
+    const match = m();
+    const begin10 = new Date(match.begin.getTime() + 10 * ffm)
+    const etBegin = formatEorzeaDate(begin10) + " " + formatEorzeaTime(begin10);
     const etEnd = formatEorzeaDate(match.end) + " " + formatEorzeaTime(match.end);
     var dt = Number(formatEorzeaDate(match.begin).substring(3) + formatEorzeaTime(match.begin).substring(0, 2));
     let level = 0;
@@ -108,11 +111,12 @@ export class RainbowService {
     return {
       zoneName: z,
       zoneNameCn: zoneNames[z],
-      begin: match.begin,
+      begin: new Date(match.begin.getTime() + 10 * ffm),
       end: match.end,
       etBegin,
       etEnd,
-      visibilityEnd: new Date(match.begin.getTime() + 0.5 * 175 * 1000),
+      visibilityEnd: new Date(match.begin.getTime() + 30 * ffm),
+      weathers:match.weathers,
       light:
         (level == 6) ? 'green' :
           (level >= 4) ? 'yellow' :

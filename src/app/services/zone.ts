@@ -1,5 +1,5 @@
 export const zoneGroup: Record<string, string[]> = {
-  '拉諾西亚': ['Middle La Noscea', 'Lower La Noscea', 'Eastern La Noscea', 'Western La Noscea', 'Upper La Noscea', 'Outer La Noscea', 'Mist'],
+  '拉諾西亞': ['Middle La Noscea', 'Lower La Noscea', 'Eastern La Noscea', 'Western La Noscea', 'Upper La Noscea', 'Outer La Noscea', 'Mist'],
   '黑衣森林': ['Gridania', 'Central Shroud', 'East Shroud', 'South Shroud', 'North Shroud', 'The Lavender Beds'],
   '薩納蘭': ['Ul\'dah', 'Western Thanalan', 'Central Thanalan', 'Eastern Thanalan', 'Southern Thanalan', 'Northern Thanalan', 'The Goblet'],
   '伊修加爾德周邊': ['Ishgard', 'Coerthas Central Highlands', 'Coerthas Western Highlands', 'Empyreum', 'The Sea of Clouds', 'Azys Lla', 'The Diadem', 'Idyllshire', 'The Dravanian Forelands', 'The Dravanian Hinterlands', 'The Churning Mists'],
@@ -15,11 +15,11 @@ export const zoneGroup: Record<string, string[]> = {
 export const zoneNames: Record<string, string> = {
   'Limsa Lominsa': '利姆薩·羅敏薩',
   'Middle La Noscea': '中拉諾西亞',
-  'Lower La Noscea': '拉諾西亚低地',
-  'Eastern La Noscea': '東拉諾西亚',
-  'Western La Noscea': '西拉諾西亚',
-  'Upper La Noscea': '拉諾西亚高地',
-  'Outer La Noscea': '拉諾西亚外地',
+  'Lower La Noscea': '拉諾西亞低地',
+  'Eastern La Noscea': '東拉諾西亞',
+  'Western La Noscea': '西拉諾西亞',
+  'Upper La Noscea': '拉諾西亞高地',
+  'Outer La Noscea': '拉諾西亞外地',
   'Mist': '海霧村',
   'Gridania': '格里達尼亞',
   'Central Shroud': '黑衣森林中央林區',

@@ -13,14 +13,14 @@ import { RouterLink } from "@angular/router";
 export class RainbowComponent implements OnInit, OnDestroy {
 
   private readonly rainbowService = inject(RainbowService);
-  
+
   // Signals for state management
   loading = signal(true);
   now = signal(new Date());
   allWindows = signal<any[]>([]);
   expandedGroups = signal<Set<number>>(new Set());
-  
-  groupedEligibleZones = signal<{nameCn: string, zones: {name: string, nameCn: string}[]}[]>([]);
+
+  groupedEligibleZones = signal<{ nameCn: string, zones: { name: string, nameCn: string }[] }[]>([]);
   isFilterExpanded = signal(false);
   selectedZones = signal<Set<string>>(new Set());
 
@@ -30,9 +30,9 @@ export class RainbowComponent implements OnInit, OnDestroy {
   groupedWindows = computed(() => {
     const currentTime = this.now().getTime();
     const selected = this.selectedZones();
-    
+
     let activeWindows = this.allWindows().filter((w: any) => w.visibilityEnd.getTime() > currentTime);
-    
+
     if (selected.size > 0) {
       activeWindows = activeWindows.filter((w: any) => selected.has(w.zoneName));
     }
@@ -53,11 +53,28 @@ export class RainbowComponent implements OnInit, OnDestroy {
         etBegin: val[0]?.etBegin,
         etEnd: val[0]?.etEnd,
         visibilityEnd: val[0]?.visibilityEnd,
-        zoneName: val.map(z=>z.zoneName),
-        zoneNameCn: val.map(z=>z.zoneNameCn),
+        zone: val.map(z => {
+          return {
+            zoneName: z.zoneName,
+            zoneNameCn: z.zoneNameCn,
+            weather: z.weathers?.[1] || ""
+          }
+        }),
         light: val[0]?.light,
       }))
   });
+
+  weathersCn(name:string) {
+    let cn = "";
+    switch (name) {
+      case "Clear Skies": cn = "碧"; break;
+      case "Fair Skies": cn = "晴"; break;
+      case "Clouds": cn = "雲"; break;
+      case "Wind": cn = "風"; break;
+      case "Dust Storms": cn = "沙"; break;
+    }
+    return (cn) ? `(${cn})` : "";
+  }
 
   ngOnInit() {
     this.groupedEligibleZones.set(this.rainbowService.getGroupedEligibleZones());
@@ -88,7 +105,7 @@ export class RainbowComponent implements OnInit, OnDestroy {
   toggleGroup(group: { nameCn: string, zones: { name: string, nameCn: string }[] }) {
     const next = new Set(this.selectedZones());
     const allSelected = group.zones.every(z => next.has(z.name));
-    
+
     if (allSelected) {
       group.zones.forEach(z => next.delete(z.name));
     } else {
@@ -150,12 +167,12 @@ export class RainbowComponent implements OnInit, OnDestroy {
   getCountdown(w: any): string {
     const diff = w.begin.getTime() - this.now().getTime();
     if (diff <= 0) return '';
-    
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const secs = Math.floor((diff % (1000 * 60)) / 1000);
-    
+
     let result = '';
     if (days > 0) result += `${days}天 `;
     if (hours > 0 || days > 0) result += `${hours}時 `;
