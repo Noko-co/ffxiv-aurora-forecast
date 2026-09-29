@@ -12,19 +12,20 @@ import { RouterLink } from "@angular/router";
 })
 export class AuroraComponent implements OnInit, OnDestroy {
   private readonly auroraService = inject(AuroraService);
-  
+
   // Signals for state management
   loading = signal(true);
   now = signal(new Date());
   allWindows = signal<any[]>([]);
-  
+  itemCnt = signal(5)
+
   private timer: any;
 
   // Computed signal for grouped windows - reacts to both allWindows and now signals
   groupedWindows = computed(() => {
     const currentTime = this.now().getTime();
     const activeWindows = this.allWindows().filter((w: any) => w.visibilityEnd.getTime() > currentTime);
-    
+
     const groups: Record<string, any[]> = {};
     activeWindows.forEach((w: any) => {
       if (!groups[w.zoneNameCn]) groups[w.zoneNameCn] = [];
@@ -35,7 +36,7 @@ export class AuroraComponent implements OnInit, OnDestroy {
     return Object.entries(groups)
       .map(([name, wins]) => ({
         zoneNameCn: name,
-        windows: wins.slice(0, 5)
+        windows: wins.slice(0, this.itemCnt())
       }))
       .sort((a, b) => zoneOrder.indexOf(a.zoneNameCn) - zoneOrder.indexOf(b.zoneNameCn));
   });
@@ -82,16 +83,18 @@ export class AuroraComponent implements OnInit, OnDestroy {
   getCountdown(w: any): string {
     const diff = w.begin.getTime() - this.now().getTime();
     if (diff <= 0) return '';
-    
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     const secs = Math.floor((diff % (1000 * 60)) / 1000);
-    
+
     let result = '';
     if (days > 0) result += `${days}天 `;
     if (hours > 0 || days > 0) result += `${hours}時 `;
     result += `${mins}分${secs}秒`;
     return result;
   }
+
+
 }

@@ -7,3 +7,8 @@
   padding: 40px 20px;
 }
 
+.footer {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
